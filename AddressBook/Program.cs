@@ -11,8 +11,8 @@ namespace AddressBook
             AddressBook addressBook = new AddressBook();
             do
             {
-                Console.WriteLine("     MENU   ");
-                Console.WriteLine("1. Add member to Contact list \n2.View Members in Contact List\n3.Exit");
+                Console.WriteLine("         MENU   ");
+                Console.WriteLine("1) Add member to Contact\n2)View Members in Contact List\n3)Edit details in Contact\n4)Exit");
                 Console.WriteLine("Enter an option:");
                 option = Convert.ToInt32(Console.ReadLine());
                 switch (option)
@@ -23,13 +23,16 @@ namespace AddressBook
                     case 2:
                         addressBook.ShowContactDetails();
                         break;
+                    case 3:
+                        addressBook.ModifyDetails();
+                        break;
                     default:
                         Console.WriteLine("Exited Successfully");
                         break;
 
                 }
 
-            } while (option<3);
+            } while (option<4);
         }
     }
 }

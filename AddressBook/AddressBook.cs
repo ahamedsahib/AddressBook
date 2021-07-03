@@ -6,7 +6,7 @@ namespace AddressBook
 {
     class AddressBook
     {
-        private static List<ContactPerson> contacts = new List<ContactPerson> ();
+        private static List<ContactPerson> contacts = new List<ContactPerson>();
         public void AddMember()
         {
             ContactPerson person = new ContactPerson();
@@ -49,6 +49,70 @@ namespace AddressBook
             }
         }
 
+        public void ModifyDetails()
+        {
+            int option;
+            Console.Write("Enter the Name of the person you want to change ");
+            string findName = Console.ReadLine().ToLower();
+
+            foreach (var modify in contacts)
+            {
+                if (findName.Equals(modify.firstName.ToLower())||findName.Equals(modify.lastName.ToLower()))
+                {
+                    do
+                    {
+                        Console.WriteLine("1.First name\n2.Last name\n3.Address\n4.City\n5.State\n6.ZipCode\n7.Phone Number\n8.email\n9.Cancel");
+                        Console.WriteLine("Enter Option to Modify Details");
+                        option = Convert.ToInt32(Console.ReadLine());
+                        switch (option)
+                        {
+                            case 1:
+                                Console.WriteLine("Enter New First name");
+                                modify.firstName = Console.ReadLine();
+                                break;
+                            case 2:
+                                Console.WriteLine("Enter New Last name");
+                                break;
+                            case 3:
+                                Console.WriteLine("Enter New Address");
+                                modify.address = Console.ReadLine();
+                                break;
+                            case 4:
+                                Console.WriteLine("Enter New City");
+                                modify.city = Console.ReadLine();
+                                break;
+                            case 5:
+                                Console.WriteLine("Enter New State");
+                                modify.state = Console.ReadLine();
+                                break;
+                            case 6:
+                                Console.WriteLine("Enter New Zip Code");
+                                modify.zipCode = Convert.ToInt32(Console.ReadLine());
+                                break;
+                            case 7:
+                                Console.Write("Enter new Phone Number: ");
+                                modify.phoneNumber = Console.ReadLine();
+                                break;
+                            case 8:
+                                Console.Write("Enter new Email-id: ");
+                                modify.email = Console.ReadLine();
+                                break;
+                            default:
+                                Console.WriteLine("Cancel");
+                                break;
+                        }
+
+                    } while (option < 9);
+                }
+                else
+                {
+                    Console.WriteLine("Entered name is not in Contact list");
+                }
+            }
+        }
 
     }
 }
+
+
+ 
