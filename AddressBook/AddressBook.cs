@@ -36,7 +36,7 @@ namespace AddressBook
 
         public void ShowContactDetails()
         {
-            foreach (var details in contacts)
+            foreach (ContactPerson details in contacts)
             {
                 Console.WriteLine($"First Name : {details.firstName}");
                 Console.WriteLine($"Last Name : {details.lastName}");
@@ -55,7 +55,7 @@ namespace AddressBook
             Console.Write("Enter the Name of the person you want to change ");
             string findName = Console.ReadLine().ToLower();
 
-            foreach (var modify in contacts)
+            foreach (ContactPerson modify in contacts)
             {
                 if (findName.Equals(modify.firstName.ToLower())||findName.Equals(modify.lastName.ToLower()))
                 {
@@ -98,7 +98,7 @@ namespace AddressBook
                                 modify.email = Console.ReadLine();
                                 break;
                             default:
-                                Console.WriteLine("Cancel");
+                                Console.WriteLine("Cancelled");
                                 break;
                         }
 
@@ -109,6 +109,29 @@ namespace AddressBook
                     Console.WriteLine("Entered name is not in Contact list");
                 }
             }
+        }
+        public  void DeleteContact()
+        {
+            
+                Console.Write("Enter name of a person you want to Delete: ");
+                string deleteName = Console.ReadLine().ToLower();
+
+                foreach (ContactPerson x in contacts)
+                {
+                    if (deleteName.Equals(x.firstName.ToLower()))
+                    {
+                        Console.WriteLine($" {x.firstName} Contact deleted");
+                        contacts.Remove(x);
+                        
+                        break;
+                    }
+                    else
+                    {
+                        Console.WriteLine("The name you have entered not in the address book");
+                    }
+                }
+                
+            
         }
 
     }

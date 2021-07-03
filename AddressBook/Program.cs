@@ -12,7 +12,7 @@ namespace AddressBook
             do
             {
                 Console.WriteLine("         MENU   ");
-                Console.WriteLine("1) Add member to Contact\n2)View Members in Contact List\n3)Edit details in Contact\n4)Exit");
+                Console.WriteLine("1) Add member to Contact\n2)View Members in Contact List\n3)Edit details in Contact\n4)Delete Contact\n5)Exit");
                 Console.WriteLine("Enter an option:");
                 option = Convert.ToInt32(Console.ReadLine());
                 switch (option)
@@ -26,13 +26,16 @@ namespace AddressBook
                     case 3:
                         addressBook.ModifyDetails();
                         break;
+                    case 4:
+                        addressBook.DeleteContact();
+                        break;
                     default:
                         Console.WriteLine("Exited Successfully");
                         break;
 
                 }
 
-            } while (option<4);
+            } while (option<5);
         }
     }
 }
