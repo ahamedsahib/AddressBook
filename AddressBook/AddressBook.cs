@@ -6,49 +6,82 @@ namespace AddressBook
 {
     class AddressBook
     {
-        private static List<ContactPerson> contacts = new List<ContactPerson>();
+        private List<ContactPerson> contacts = new List<ContactPerson>();
+        private static Dictionary<string, List<ContactPerson>> addressBookDictionary = new Dictionary<string, List<ContactPerson>>();
         public void AddMember()
         {
-            ContactPerson person = new ContactPerson();
-
-            Console.Write("Enter First Name: ");
-            person.firstName = Console.ReadLine();
-            Console.Write("Enter Last Name: ");
-            person.lastName = Console.ReadLine();
-            Console.Write("Enter Address: ");
-            person.address = Console.ReadLine();
-            Console.Write("Enter City: ");
-            person.city = Console.ReadLine();
-            Console.Write("Enter State: ");
-            person.state = Console.ReadLine();
-            Console.Write("Enter Zip Code: ");
-            person.zipCode = Convert.ToInt32(Console.ReadLine());
-            Console.Write("Enter Phone Number: ");
-            person.phoneNumber = Console.ReadLine();
-            Console.Write("Enter Email-id: ");
-            person.email = Console.ReadLine();
-
-
-            contacts.Add(person);
-
-            Console.WriteLine("Successfully Added");
-        }
-
-        public void ShowContactDetails()
-        {
-            foreach (ContactPerson details in contacts)
+            bool flag = true;
+            Console.WriteLine("Enter The Name of the Address Book");
+            string addressBookName = Console.ReadLine();
+            //Checking uniqueness of address books
+            while (flag)
             {
-                Console.WriteLine($"First Name : {details.firstName}");
-                Console.WriteLine($"Last Name : {details.lastName}");
-                Console.WriteLine($"Address : {details.address}");
-                Console.WriteLine($"City : {details.city}");
-                Console.WriteLine($"State : {details.state}");
-                Console.WriteLine($"Zip Code: {details.zipCode}");
-                Console.WriteLine($"Phone Number: {details.phoneNumber}");
-                Console.WriteLine($"Email: {details.email}");
+                if (addressBookDictionary.Count > 0)
+                {
+                    if (addressBookDictionary.ContainsKey(addressBookName))
+                    {
+                        Console.WriteLine("This name of address book already exists");
+                        break;
+                    }
+
+                }
+
+
+                ContactPerson person = new ContactPerson();
+
+                Console.Write("Enter First Name: ");
+                person.firstName = Console.ReadLine();
+                Console.Write("Enter Last Name: ");
+                person.lastName = Console.ReadLine();
+                Console.Write("Enter Address: ");
+                person.address = Console.ReadLine();
+                Console.Write("Enter City: ");
+                person.city = Console.ReadLine();
+                Console.Write("Enter State: ");
+                person.state = Console.ReadLine();
+                Console.Write("Enter Zip Code: ");
+                person.zipCode = Convert.ToInt32(Console.ReadLine());
+                Console.Write("Enter Phone Number: ");
+                person.phoneNumber = Console.ReadLine();
+                Console.Write("Enter Email-id: ");
+                person.email = Console.ReadLine();
+
+
+                contacts.Add(person);
+                addressBookDictionary.Add(addressBookName, contacts);
+
+                Console.WriteLine("Successfully Added");
+                Console.WriteLine("you want add more member? 'YES' or 'NO' choose one");
+                if (Console.ReadLine().ToLower().Equals("yes"))
+                {
+                    flag = true;
+                }
+                else
+                {
+                    break;
+                }
+
             }
         }
+        public void ShowContactDetails()
+        {
+            foreach (KeyValuePair<string, List<ContactPerson>> dict in addressBookDictionary)
+            {
+                Console.WriteLine($"         {dict.Key} Address Book");
+                foreach (var details in dict.Value)
+                {
 
+                    Console.WriteLine($"First Name : {details.firstName}");
+                    Console.WriteLine($"Last Name : {details.lastName}");
+                    Console.WriteLine($"Address : {details.address}");
+                    Console.WriteLine($"City : {details.city}");
+                    Console.WriteLine($"State : {details.state}");
+                    Console.WriteLine($"Zip Code: {details.zipCode}");
+                    Console.WriteLine($"Phone Number: {details.phoneNumber}");
+                    Console.WriteLine($"Email: {details.email}");
+                }
+            }
+        }
         public void ModifyDetails()
         {
             int option;
