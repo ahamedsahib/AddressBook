@@ -106,7 +106,7 @@ namespace AddressBook
                 }
                 else
                 {
-                    Console.WriteLine("Entered name is not in Contact list");
+                    Console.WriteLine("Entered name not in Contact list");
                 }
             }
         }
