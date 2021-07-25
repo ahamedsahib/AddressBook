@@ -8,7 +8,8 @@ namespace AddressBook
     {
         private List<ContactPerson> contacts;
         private static List<ContactPerson> searchContacts = new List<ContactPerson>();
-        
+        private static List<ContactPerson> viewContacts = new List<ContactPerson>();
+
         private static Dictionary<string, List<ContactPerson>> addressBookDictionary = new Dictionary<string, List<ContactPerson>>();
         public void AddMember()
         {
@@ -295,6 +296,81 @@ namespace AddressBook
                 Console.WriteLine("Adress book is empty");
             }
 
+        }
+        public void ViewContactByStateOrCity()
+        {
+
+            Console.WriteLine("1. View by city name\n2.View By state name\nEnter your option:");
+            switch (Convert.ToInt32(Console.ReadLine()))
+            {
+                case 1:
+                    Console.WriteLine("Enter the name of city in which you want to view:");
+                    string cityName = Console.ReadLine();
+                    ViewContactByCityName(cityName);
+                    break;
+                case 2:
+                    Console.WriteLine("Enter the state of city in which you want to view:");
+                    string stateName = Console.ReadLine();
+                    ViewContactByStateName(stateName);
+                    break;
+                default:
+                    return;
+
+            }
+
+        }
+
+        public void ViewContactByCityName(string cityName)
+        {
+            if (addressBookDictionary.Count > 0)
+            {
+
+                foreach (KeyValuePair<string, List<ContactPerson>> dict in addressBookDictionary)
+                {
+                    viewContacts = dict.Value.FindAll(x => x.state.Equals(cityName));
+                }
+                if (searchContacts.Count > 0)
+                {
+                    foreach (var x in searchContacts)
+                    {
+                        PrintValues(x);
+                    }
+                }
+                else
+                {
+                    Console.WriteLine("No Persons found");
+                }
+            }
+            else
+            {
+                Console.WriteLine("Adress book is empty");
+            }
+        }
+        public void ViewContactByStateName(string stateName)
+        {
+            if (addressBookDictionary.Count > 0)
+            {
+
+                foreach (KeyValuePair<string, List<ContactPerson>> dict in addressBookDictionary)
+                {
+                    viewContacts = dict.Value.FindAll(x => x.state.Equals(stateName));
+                }
+                if (searchContacts.Count > 0)
+                {
+                    foreach (var x in searchContacts)
+                    {
+                        PrintValues(x);
+                    }
+                }
+                else
+                {
+                    Console.WriteLine("No Persons found");
+                }
+            }
+            else
+            {
+                Console.WriteLine("Adress book is empty");
+            }
         }
 
     }
