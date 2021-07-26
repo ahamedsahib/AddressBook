@@ -95,7 +95,7 @@ namespace AddressBook
             
 ;           
             addressBookDictionary.Add(addressBookName, contacts);
-            SortContacts();
+            addressBookDictionary.Add(addressBookName, SortContacts());
         }
         public void ShowContactDetails()
         {
@@ -417,16 +417,33 @@ namespace AddressBook
             }
 
         }
-        public void SortContacts()
+        public List<ContactPerson> SortContacts()
         {
             if (addressBookDictionary.Count > 0)
             {
 
+                Console.WriteLine("1.Sort by person name\n2.Sort by city name\n3.Sort by state name\n4.Sort by zipcode\nEnter Your option");
+                int option = Convert.ToInt32(Console.ReadLine());
                 //printing the values in address book
                 foreach (KeyValuePair<string, List<ContactPerson>> dict in addressBookDictionary)
                 {
-                    //sorting list based on first name
-                    contacts = dict.Value.OrderBy(x => x.firstName).ToList();
+                    switch (option)
+                    {
+                        case 1:
+                            //sorting list based on first name
+                            contacts = dict.Value.OrderBy(x => x.firstName).ToList();
+                            break;
+                        case 2:
+                            contacts = dict.Value.OrderBy(x => x.city).ToList();
+                            break;
+                        case 3:
+                            contacts = dict.Value.OrderBy(x => x.state).ToList();
+                            break;
+                        case 4:
+                            contacts = dict.Value.OrderBy(x => x.zipCode).ToList();
+                            break;
+                    }
+
                     Console.WriteLine($"**********AFTER SORTING {dict.Key}**********");
                     foreach (var addressBook in contacts)
                     {
@@ -438,7 +455,7 @@ namespace AddressBook
             {
                 Console.WriteLine("Address Book is Empty");
             }
-
+            return contacts;
         }
 
     }
