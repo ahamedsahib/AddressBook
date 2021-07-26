@@ -1,6 +1,6 @@
 using System;
 using System.Collections.Generic;
-
+using System.Linq;
 
 namespace AddressBook
 {
@@ -9,6 +9,7 @@ namespace AddressBook
         private List<ContactPerson> contacts;
         private static List<ContactPerson> searchContacts = new List<ContactPerson>();
         private static List<ContactPerson> viewContacts = new List<ContactPerson>();
+        private int countCity = 0, countState = 0;
 
         private static Dictionary<string, List<ContactPerson>> addressBookDictionary = new Dictionary<string, List<ContactPerson>>();
         public void AddMember()
@@ -91,7 +92,10 @@ namespace AddressBook
                 }
 
             }
+            
+;           
             addressBookDictionary.Add(addressBookName, contacts);
+            SortContacts();
         }
         public void ShowContactDetails()
         {
@@ -306,12 +310,12 @@ namespace AddressBook
                 case 1:
                     Console.WriteLine("Enter the name of city in which you want to view:");
                     string cityName = Console.ReadLine();
-                    ViewContactByCityName(cityName);
+                    ViewContactByCityName(cityName, "view");
                     break;
                 case 2:
                     Console.WriteLine("Enter the state of city in which you want to view:");
                     string stateName = Console.ReadLine();
-                    ViewContactByStateName(stateName);
+                    ViewContactByStateName(stateName, "view");
                     break;
                 default:
                     return;
@@ -320,7 +324,7 @@ namespace AddressBook
 
         }
 
-        public void ViewContactByCityName(string cityName)
+        public void ViewContactByCityName(string cityName, string check)
         {
             if (addressBookDictionary.Count > 0)
             {
@@ -329,24 +333,33 @@ namespace AddressBook
                 {
                     viewContacts = dict.Value.FindAll(x => x.state.Equals(cityName));
                 }
-                if (searchContacts.Count > 0)
+                if (check.Equals("view"))
                 {
-                    foreach (var x in searchContacts)
+                    if (searchContacts.Count > 0)
                     {
-                        PrintValues(x);
+                        foreach (var x in searchContacts)
+                        {
+                            PrintValues(x);
+                        }
+                    }
+                    else
+                    {
+                        Console.WriteLine("No Persons found");
                     }
                 }
                 else
                 {
-                    Console.WriteLine("No Persons found");
+                    countCity = viewContacts.Count;
+                    Console.WriteLine($"The total persons in {cityName} are : {countCity}");
                 }
             }
             else
             {
                 Console.WriteLine("Adress book is empty");
             }
+            
         }
-        public void ViewContactByStateName(string stateName)
+        public void ViewContactByStateName(string stateName, string check)
         {
             if (addressBookDictionary.Count > 0)
             {
@@ -355,22 +368,77 @@ namespace AddressBook
                 {
                     viewContacts = dict.Value.FindAll(x => x.state.Equals(stateName));
                 }
-                if (searchContacts.Count > 0)
+                if (check.Equals("view"))
                 {
-                    foreach (var x in searchContacts)
+
+                    if (searchContacts.Count > 0)
                     {
-                        PrintValues(x);
+                        foreach (var x in searchContacts)
+                        {
+                            PrintValues(x);
+                        }
+                    }
+                    else
+                    {
+                        Console.WriteLine("No Persons found");
                     }
                 }
                 else
                 {
-                    Console.WriteLine("No Persons found");
+                    countState = viewContacts.Count;
+                    Console.WriteLine($"The total persons in {stateName} are : {countState}");
                 }
             }
             else
             {
                 Console.WriteLine("Adress book is empty");
             }
+            
+        }
+        public void CountByStateOrCity()
+        {
+
+            Console.WriteLine("1.Count by city name\n2.Count By state name\nEnter your option:");
+            switch (Convert.ToInt32(Console.ReadLine()))
+            {
+                case 1:
+                    Console.WriteLine("Enter the name of city in which you want to count persons:");
+                    string cityName = Console.ReadLine();
+                    ViewContactByCityName(cityName, "count");
+                    break;
+                case 2:
+                    Console.WriteLine("Enter the name of state in which you want to count persons:");
+                    string stateName = Console.ReadLine();
+                    ViewContactByStateName(stateName, "count");
+                    break;
+                default:
+                    return;
+
+            }
+
+        }
+        public void SortContacts()
+        {
+            if (addressBookDictionary.Count > 0)
+            {
+
+                //printing the values in address book
+                foreach (KeyValuePair<string, List<ContactPerson>> dict in addressBookDictionary)
+                {
+                    //sorting list based on first name
+                    contacts = dict.Value.OrderBy(x => x.firstName).ToList();
+                    Console.WriteLine($"**********AFTER SORTING {dict.Key}**********");
+                    foreach (var addressBook in contacts)
+                    {
+                        PrintValues(addressBook);
+                    }
+                }
+            }
+            else
+            {
+                Console.WriteLine("Address Book is Empty");
+            }
+
         }
 
     }
