@@ -12,7 +12,7 @@ namespace AddressBook
             do
             {
                 Console.WriteLine("         MENU   ");
-                Console.WriteLine("1) Add member to Contact\n2)View Members in Contact List\n3)Edit details in Contact\n4)Delete Contact\n5)SearchPerson\n6)View Members in Contact List\n7)Read File\n8)Save File\n9)Exit");
+                Console.WriteLine("1) Add member to Contact\n2)View Members in Contact List\n3)Edit details in Contact\n4)Delete Contact\n5)SearchPerson\n6)View Members in Contact List\n7)Count Contact by State or City\n8)Read File\n9)Save File\n10)Exit");
                 Console.WriteLine("Enter an option:");
                 option = Convert.ToInt32(Console.ReadLine());
                 switch (option)
@@ -41,10 +41,12 @@ namespace AddressBook
                     case 8:
                         addressBook.ReadFromFile();
                         addressBook.ReadFromCsvFile();
+                        addressBook.ReadFromJsonFile();
                         break;
                     case 9:
                         addressBook.WriteToFile();
                         addressBook.WriteToCsvFile();
+                        addressBook.WriteToJsonFile();
                         break;
                     default:
                         Console.WriteLine("Exited Successfully");

@@ -5,6 +5,7 @@ using System.Text;
 using System.IO;
 using CsvHelper;
 using System.Globalization;
+using Newtonsoft.Json;
 
 namespace AddressBook
 {
@@ -548,7 +549,7 @@ namespace AddressBook
             string filePath = @"/Users/Akshal/Projects/AddressBook/AddressBook/AddressBookCSV.csv";
             try
             {
-                string abName = "Local";
+                string abName = "Global";
                 if (File.Exists(filePath))
                 {
                     //Stream reader for reading from csv file
@@ -610,6 +611,77 @@ namespace AddressBook
             {
                 Console.WriteLine($"Exception: {ex.Message}");
             }
+        }
+        public void ReadFromJsonFile()
+        {
+            string filePath = @"/Users/Akshal/Projects/AddressBook/AddressBook/AddressContactsJSon.json";
+            try
+            {
+                string abName = "Global";
+                if (File.Exists(filePath))
+                {
+                    // convert json records to list
+                    List<ContactPerson> jsonList = JsonConvert.DeserializeObject<List<ContactPerson>>(File.ReadAllText(filePath));
+                    addressBookDictionary.Add(abName, jsonList);
+                    Console.WriteLine("Data added succesfully");
+                }
+
+
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Exception: {ex.Message}");
+            }
+
+
+        }
+        /// <summary>
+        /// Write records into json file
+        /// </summary>
+        public void WriteToJsonFile()
+        {
+            string filePath = @"/Users/Akshal/Projects/AddressBook/AddressBook/AddressContactsJSon.json";
+            try
+            {
+                if (addressBookDictionary.Count > 0)
+                {
+                    //initially clear the file
+                    File.WriteAllText(filePath, string.Empty);
+
+                    //Initialising json serializer
+                    JsonSerializer serializer = new JsonSerializer();
+                    using (StreamWriter writer = new StreamWriter(filePath))
+                    using (JsonWriter jsonWriter = new JsonTextWriter(writer))
+                    {
+                        foreach (KeyValuePair<string, List<ContactPerson>> dict in addressBookDictionary)
+                        {
+                            //initialising contacts list
+                            contacts = new List<ContactPerson>();
+                            foreach (var addressBook in dict.Value)
+                            {
+
+                                contacts.Add(addressBook);
+
+                            }
+                            //write records into json file
+                            serializer.Serialize(jsonWriter, contacts);
+                        }
+                    }
+                    Console.WriteLine("Records Written into json file");
+                }
+                else
+                {
+                    Console.WriteLine("Address Book is Empty");
+                }
+
+
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Exception: {ex.Message}");
+            }
+
+
         }
     }
 }
