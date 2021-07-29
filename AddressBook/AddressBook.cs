@@ -1,6 +1,10 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
+using System.IO;
+using CsvHelper;
+using System.Globalization;
 
 namespace AddressBook
 {
@@ -95,7 +99,9 @@ namespace AddressBook
             
 ;           
             addressBookDictionary.Add(addressBookName, contacts);
-            addressBookDictionary.Add(addressBookName, SortContacts());
+            //addressBookDictionary.ToDictionary(addressBookName, SortContacts());
+            addressBookDictionary[addressBookName] = SortContacts();
+            
         }
         public void ShowContactDetails()
         {
@@ -457,7 +463,154 @@ namespace AddressBook
             }
             return contacts;
         }
+        public void ReadFromFile()
+        {
+            string filePath = @"/Users/Akshal/Projects/AddressBook/AddressBook/AddressBookText.txt";
 
+            try
+            {
+                string[] fileContents = File.ReadAllLines(filePath);
+                var currentAddressBookName = fileContents[0];
+                contacts = new List<ContactPerson>();
+                foreach (string userDetails in fileContents.Skip(1))
+                {
+                    if (userDetails.Contains(","))
+                    {
+                        ContactPerson person = new ContactPerson();
+                        string[] line = userDetails.Split(",");
+                        person.firstName = line[0];
+                        person.lastName = line[1];
+                        person.address = line[2];
+                        person.city = line[3];
+                        person.state = line[4];
+                        person.zipCode = Convert.ToInt32(line[5]);
+                        person.phoneNumber = line[6];
+                        person.email = line[7];
+                        contacts.Add(person);
+                    }
+                    else
+                    {
+                        addressBookDictionary.Add(currentAddressBookName, contacts);
+                        currentAddressBookName = userDetails;
+                        contacts = new List<ContactPerson>();
+                    }
+
+
+                }
+                addressBookDictionary.Add(currentAddressBookName, contacts);
+                Console.WriteLine("SuccessFully Added");
+
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+            }
+
+        }
+
+        public void WriteToFile()
+        {
+            string filePath = @"/Users/Akshal/Projects/AddressBook/AddressBook/AddressBookText.txt";
+
+            try
+            {
+                if (addressBookDictionary.Count > 0)
+                {
+                    File.WriteAllText(filePath, string.Empty);
+                    //printing the values in address book
+                    foreach (KeyValuePair<string, List<ContactPerson>> dict in addressBookDictionary)
+                    {
+                        File.AppendAllText(filePath, $"{dict.Key}\n");
+                        foreach (var addressBook in dict.Value)
+                        {
+                            string text = $"{addressBook.firstName},{addressBook.lastName},{addressBook.address},{addressBook.city},{addressBook.state},{addressBook.zipCode},{addressBook.phoneNumber},{addressBook.email}\n";
+                            File.AppendAllText(filePath, text);
+                        }
+                    }
+                    Console.WriteLine("successfully stored in file");
+                }
+                else
+                {
+                    Console.WriteLine("Address Book is Empty");
+                }
+
+
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+            }
+
+        }
+        public void ReadFromCsvFile()
+        {
+            //File path
+            string filePath = @"/Users/Akshal/Projects/AddressBook/AddressBook/AddressBookCSV.csv";
+            try
+            {
+                string abName = "Local";
+                if (File.Exists(filePath))
+                {
+                    //Stream reader for reading from csv file
+                    using (var reader = new StreamReader(filePath))
+                    using (var csv = new CsvReader(reader, CultureInfo.InvariantCulture))
+                    {
+                        //fetching records from csv files
+                        var csvContactsList = csv.GetRecords<ContactPerson>().ToList();
+                        addressBookDictionary.Add(abName, csvContactsList);
+                        Console.WriteLine("Successfully Added from file");
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Exception: {ex.Message}");
+            }
+        }
+        /// <summary>
+        /// Write records to csv file
+        /// </summary>
+        public void WriteToCsvFile()
+        {
+            //File path of csv file
+            string filePath = @"/Users/Akshal/Projects/AddressBook/AddressBook/AddressBookCSV.csv";
+            try
+            {
+                if (File.Exists(filePath))
+                {
+                    if (addressBookDictionary.Count > 0)
+                    {
+                
+                        //initially clear the file
+                        File.WriteAllText(filePath, string.Empty);
+                        //stream writer to write files
+                        using (var writer = new StreamWriter(filePath))
+                        using (var csvWriter = new CsvWriter(writer, CultureInfo.InvariantCulture))
+                        {
+                            foreach (KeyValuePair<string, List<ContactPerson>> dict in addressBookDictionary)
+                            {
+                                foreach (var addressBook in dict.Value)
+                                {
+                                    contacts = new List<ContactPerson>();
+                                    contacts.Add(addressBook);
+                                    //write records into csv file
+                                    csvWriter.WriteRecords(contacts);
+                                }
+                            }
+                        }
+                        Console.WriteLine("Records Written into csv file");
+                    }
+                    else
+                    {
+                        Console.WriteLine("Address Book is Empty");
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Exception: {ex.Message}");
+            }
+        }
     }
 }
 

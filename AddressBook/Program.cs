@@ -12,7 +12,7 @@ namespace AddressBook
             do
             {
                 Console.WriteLine("         MENU   ");
-                Console.WriteLine("1) Add member to Contact\n2)View Members in Contact List\n3)Edit details in Contact\n4)Delete Contact\n5)SearchPerson\n6)View Members in Contact List\n7)Exit");
+                Console.WriteLine("1) Add member to Contact\n2)View Members in Contact List\n3)Edit details in Contact\n4)Delete Contact\n5)SearchPerson\n6)View Members in Contact List\n7)Read File\n8)Save File\n9)Exit");
                 Console.WriteLine("Enter an option:");
                 option = Convert.ToInt32(Console.ReadLine());
                 switch (option)
@@ -38,13 +38,21 @@ namespace AddressBook
                     case 7:
                         addressBook.CountByStateOrCity();
                         break;
+                    case 8:
+                        addressBook.ReadFromFile();
+                        addressBook.ReadFromCsvFile();
+                        break;
+                    case 9:
+                        addressBook.WriteToFile();
+                        addressBook.WriteToCsvFile();
+                        break;
                     default:
                         Console.WriteLine("Exited Successfully");
                         break;
 
                 }
 
-            } while (option<8);
+            } while (option<10);
         }
     }
 }
